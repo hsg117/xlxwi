@@ -453,7 +453,7 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
 }
 
 /* ============================================================
-   Alert tiers — royal seal plates (ختم لكل مستوى: معدنه، رمزه، قوته)
+   Alert tiers — لوحات ذهبية: المبلغ هو البطل، والقوّة تُقرأ من الخيط
    ============================================================ */
 .tier-head-line {
   height: 1px;
@@ -462,12 +462,12 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
 }
 .tier-head-line:last-child { background: linear-gradient(270deg, transparent, rgba(227, 179, 65, 0.5)); }
 
-/* الغلاف يحمل دخول البطاقة فقط — الرفع عند المرور على البطاقة نفسها،
-   وإلا أبقت طبقة الحركة الأولى قيمتها النهائية وتفوّقت على :hover */
-.tier-cell { animation: tier-rise 0.75s var(--ease) both; }
+/* الغلاف يحمل الدخول، والرفع على اللوحة نفسها — لو بقيت الحركة هنا لأبقت
+   قيمتها النهائية وطغت على :hover. --tc و --lvl و --p مورّثة للوحة. */
+.tier-cell { animation: tier-rise 0.68s var(--ease) both; }
 @keyframes tier-rise {
-  0% { opacity: 0; transform: translateY(24px) scale(0.93); }
-  60% { opacity: 1; transform: translateY(-5px) scale(1.015); }
+  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+  62% { opacity: 1; transform: translateY(-4px) scale(1.008); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -476,177 +476,165 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 5px;
+  justify-content: center;
   height: 100%;
-  padding: 16px 10px 13px;
-  border-radius: 20px;
+  min-height: 136px;
+  padding: 24px 16px 22px;
+  border-radius: 18px;
   overflow: hidden;
   isolation: isolate;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   background:
-    radial-gradient(120% 88% at 50% -18%, color-mix(in srgb, var(--tc, #E3B341) 26%, transparent), transparent 62%),
-    linear-gradient(180deg, rgba(62, 14, 26, 0.66), rgba(15, 3, 8, 0.92));
-  box-shadow: inset 0 1px 0 rgba(255, 243, 214, 0.07), 0 12px 26px -18px rgba(0, 0, 0, 0.95);
-  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+    radial-gradient(120% 72% at 50% 0%, color-mix(in srgb, var(--tc, #E3B341) 14%, transparent), transparent 68%),
+    linear-gradient(180deg, rgba(52, 12, 22, 0.5), rgba(12, 3, 7, 0.88));
+  box-shadow: inset 0 1px 0 rgba(255, 243, 214, 0.05), inset 0 -24px 34px -26px rgba(0, 0, 0, 0.95), 0 16px 30px -24px rgba(0, 0, 0, 0.95);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+/* تسرّب ضوءٍ أعلى اللوحة، يزداد سطوعًا مع كل مبلغ — بلا blur يظهر كخطٍّ زائد */
+.tier-plate::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 26%;
+  right: 26%;
+  height: 3px;
+  background: var(--tc, #E3B341);
+  opacity: calc(0.12 + var(--lvl, 0.5) * 0.34);
+  filter: blur(6px);
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
 }
 .tier-plate::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(150deg, var(--tc, #E3B341), transparent 42%, rgba(255, 243, 214, 0.16));
-  opacity: 0.28;
+  background: linear-gradient(165deg, color-mix(in srgb, var(--tc, #E3B341) 55%, transparent), transparent 48%, rgba(0, 0, 0, 0.5));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
+  opacity: 0.5;
+  transition: opacity 0.4s var(--ease);
   pointer-events: none;
-  transition: opacity 0.35s;
 }
 .tier-plate:hover {
-  transform: translateY(-7px) scale(1.025);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 1px 0 rgba(255, 243, 214, 0.14), 0 26px 46px -22px rgba(0, 0, 0, 0.95), 0 0 34px -14px var(--tc, #E3B341);
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--tc, #E3B341) 30%, transparent);
+  box-shadow: 0 24px 42px -26px rgba(0, 0, 0, 1), 0 0 34px -16px var(--tc, #E3B341);
 }
-.tier-plate:hover::before { opacity: 0.85; }
+.tier-plate:hover::before { opacity: 1; }
+.tier-plate:hover::after { opacity: 1; }
 .tier-plate:active { transform: translateY(-2px) scale(0.99); }
 .tier-plate:focus-visible { outline: 2px solid var(--tc, #E3B341); outline-offset: 3px; }
 
 .tier-plate-glow {
   position: absolute;
-  inset: -45%;
+  inset: -42%;
   z-index: -1;
-  background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--tc, #E3B341) 55%, transparent), transparent 62%);
-  opacity: 0.13;
-  transition: opacity 0.4s;
+  background: radial-gradient(circle at 50% 22%, color-mix(in srgb, var(--tc, #E3B341) 50%, transparent), transparent 62%);
+  opacity: 0.08;
+  transition: opacity 0.45s var(--ease);
   pointer-events: none;
 }
-.tier-plate:hover .tier-plate-glow { opacity: 0.3; }
+.tier-plate:hover .tier-plate-glow { opacity: 0.22; }
 
 .tier-plate-sheen {
   position: absolute;
-  top: -20%;
-  bottom: -20%;
-  left: -55%;
+  top: 0;
+  bottom: 0;
   width: 42%;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transform: skewX(-14deg);
-  opacity: 0;
+  z-index: 3;
+  background: linear-gradient(100deg, transparent, rgba(255, 248, 232, 0.15), transparent);
+  transform: translateX(-170%);
   pointer-events: none;
 }
-.tier-plate:hover .tier-plate-sheen { animation: tier-sweep 0.85s var(--ease); }
+.tier-plate:hover .tier-plate-sheen { animation: tier-sweep 0.8s var(--ease); }
 @keyframes tier-sweep {
-  0% { opacity: 1; transform: translateX(0) skewX(-14deg); }
-  100% { opacity: 0; transform: translateX(330%) skewX(-14deg); }
+  0% { transform: translateX(-170%); }
+  100% { transform: translateX(380%); }
 }
 
-/* الختم: حلقة دوّارة + رمز معدني */
-.tier-emblem {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  color: var(--tc, #E3B341);
-}
-.tier-emblem svg {
-  position: relative;
-  z-index: 2;
-  width: 25px;
-  height: 25px;
-  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.8)) drop-shadow(0 0 9px rgba(227, 179, 65, 0.35));
-  transition: transform 0.4s var(--ease);
-}
-.tier-plate:hover .tier-emblem svg { transform: scale(1.14) rotate(-7deg); }
-.tier-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: conic-gradient(from 0deg, transparent 0 40deg, var(--tc, #E3B341) 92deg, transparent 150deg 360deg);
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
-  animation: tier-spin 5.4s linear infinite;
-  animation-play-state: paused;
-  opacity: 0.9;
-}
-.tier-plate:hover .tier-ring { animation-play-state: running; }
-.tier-ring-inner {
-  position: absolute;
-  inset: 5px;
-  border-radius: 999px;
-  border: 1px dashed rgba(255, 243, 214, 0.22);
-  background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), transparent 65%);
-}
-@keyframes tier-spin { to { transform: rotate(360deg); } }
-
-.tier-amount { display: flex; align-items: baseline; gap: 5px; line-height: 1; }
-.tier-amount b {
-  /* رقاقة الذهب: نفس طلاء الوجو، فتبقى الأرقام من لغة الموقع لا من لون المستوى */
-  background: linear-gradient(180deg, #FFF3D6 8%, #E3B341 58%, #A9761A 96%);
+/* المبلغ وحده: لا اسم، لا رمز عملة زائد — الدولار معلن في عنوان القسم */
+.tier-amount {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  background: linear-gradient(180deg, #FFF3D6 6%, #E3B341 56%, #A9761A 96%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.8)) drop-shadow(0 0 12px color-mix(in srgb, var(--tc, #E3B341) 45%, transparent));
-  font-size: 25px;
-  letter-spacing: 0.02em;
-  transition: transform 0.35s var(--ease);
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.7)) drop-shadow(0 0 14px color-mix(in srgb, var(--tc, #E3B341) 32%, transparent));
+  transition: transform 0.4s var(--ease);
 }
-.tier-plate:hover .tier-amount b { transform: translateY(-2px); }
-.tier-amount i { font-style: normal; font-size: 10px; font-weight: 800; color: rgba(255, 247, 236, 0.38); }
+.tier-plate:hover .tier-amount { transform: translateY(-2px); }
 
-.tier-name { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-.tier-name-ar { font-size: 13px; font-weight: 900; color: rgba(255, 247, 236, 0.92); letter-spacing: 0.01em; }
-.tier-name-en { font-size: 8.5px; font-weight: 900; letter-spacing: 0.24em; color: var(--tc, #E3B341); opacity: 0.7; }
-
-/* سلّم القوة: ست درجات، المضاء منها بقدر المستوى */
-.tier-meter { display: flex; gap: 3px; width: 100%; max-width: 116px; margin-top: 3px; }
-.tier-seg {
-  flex: 1;
-  height: 5px;
-  border-radius: 99px;
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+/* خيط القوّة: تعبئة تنمو من طرف البداية، وعرضها = رتبة المستوى */
+.tier-meter {
+  position: relative;
+  width: 100%;
+  max-width: 210px;
+  height: 3px;
+  margin-top: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
 }
-.tier-seg.on {
-  background: linear-gradient(180deg, #FFF3D6, var(--tc, #E3B341) 55%, rgba(0, 0, 0, 0.35));
-  box-shadow: 0 0 10px -1px var(--tc, #E3B341);
-  animation: tier-live 2.8s ease-in-out infinite;
-}
-@keyframes tier-live { 0%, 100% { opacity: 0.72; } 50% { opacity: 1; } }
-
-/* قمة السلّم: تاج نابض */
-.tier-plate-top { border-color: rgba(228, 80, 106, 0.4); }
-.tier-plate-top .tier-ring { animation-play-state: running; }
-.tier-plate-top .tier-plate-glow { animation: tier-breathe 3.6s ease-in-out infinite; }
-@keyframes tier-breathe {
-  0%, 100% { opacity: 0.2; transform: scale(0.94); }
-  50% { opacity: 0.42; transform: scale(1.06); }
-}
-.tier-ribbon {
+.tier-meter i {
   position: absolute;
-  top: 7px;
-  inset-inline-end: 7px;
-  padding: 2px 7px;
-  border-radius: 99px;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--p, 100%);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 60%), var(--tc, #E3B341);
+  box-shadow: 0 0 10px -1px var(--tc, #E3B341);
+  animation: tier-fill 0.85s var(--ease) 0.2s both;
+  transition: filter 0.35s var(--ease);
+}
+.tier-plate:hover .tier-meter i { filter: brightness(1.25); }
+@keyframes tier-fill {
+  from { width: 0; }
+  to { width: var(--p, 100%); }
+}
+
+/* أعلى مبلغ */
+.tier-plate-top { border-color: rgba(228, 80, 106, 0.26); }
+.tier-plate-top .tier-plate-glow { animation: tier-breathe 3.4s ease-in-out infinite; }
+@keyframes tier-breathe {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.28; }
+}
+.tier-flag {
+  position: absolute;
+  top: 9px;
+  inset-inline-end: 10px;
+  z-index: 3;
+  padding: 2px 8px;
+  border-radius: 999px;
   background: linear-gradient(180deg, #FFF3D6, #E3B341);
   color: #120307;
-  font-size: 8.5px;
+  font-size: 9px;
   font-weight: 900;
-  letter-spacing: 0.1em;
-  box-shadow: 0 4px 12px -4px rgba(227, 179, 65, 0.85);
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 10px -5px rgba(227, 179, 65, 0.9);
 }
 
-@media (min-width: 640px) {
-  .tier-emblem { width: 58px; height: 58px; }
-  .tier-emblem svg { width: 28px; height: 28px; }
-  .tier-amount b { font-size: 30px; }
-  .tier-name-ar { font-size: 14px; }
+@media (min-width: 768px) {
+  .tier-plate { min-height: 152px; }
+  .tier-amount { font-size: 40px; }
+  .tier-meter { margin-top: 18px; }
+}
+/* ثلاث أعمدة عريضة: الرقم والمقياس يملآن اللوحة بدل ما يطفوا فيها */
+@media (min-width: 1024px) {
+  .tier-plate { min-height: 166px; }
+  .tier-amount { font-size: 44px; }
+  .tier-meter { max-width: 240px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tier-cell { animation: none; }
-  .tier-seg.on, .tier-plate-top .tier-plate-glow, .tier-ring { animation: none; }
+  .tier-cell, .tier-meter i { animation: none; }
+  .tier-plate-top .tier-plate-glow { animation: none; }
   .tier-plate:hover .tier-plate-sheen { animation: none; }
 }
 
