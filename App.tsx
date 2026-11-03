@@ -869,35 +869,71 @@ const RankBadge: React.FC<{ rank: number; big?: boolean }> = ({ rank, big = fals
     </span>
 );
 
-// Special alert tiers — 3D metal bars ladder
-const TIERS = [
-    { amount: '25$', c: '#CD7F32', name: 'BRONZE', h: '28%' },
-    { amount: '99$', c: '#C0C0C0', name: 'SILVER', h: '42%' },
-    { amount: '300$', c: '#E3B341', name: 'GOLD', h: '60%' },
-    { amount: '505$', c: '#7FD4E8', name: 'DIAMOND', h: '80%' },
-    { amount: '999$', c: '#C21E3A', name: 'RUBY', h: '100%' },
+// Special alert tiers — royal seal plates: كل مستوى ختمٌ له معدنه وقوته
+type Tier = { v: number; ar: string; en: string; c: string; glyph: string };
+const TIERS: Tier[] = [
+    { v: 50, ar: 'شرارة', en: 'SPARK', c: '#A97C53', glyph: 'M12 3.5l1.9 5.6 5.6 1.9-5.6 1.9-1.9 5.6-1.9-5.6L4.5 11l5.6-1.9z' },
+    { v: 100, ar: 'لهب', en: 'FLAME', c: '#CBA15E', glyph: 'M12 3.2c2.9 3.3 4.8 5.3 4.8 8.1A4.8 4.8 0 017.2 11.3c0-1.8 1-3.2 2.3-4.4.3 1.2 1 1.9 1.8 2.2-.3-2.2-.1-4 .7-5.9z' },
+    { v: 200, ar: 'عاصفة', en: 'STORM', c: '#E3B341', glyph: 'M13.4 2.6 5.6 13.4h4.6l-1.4 8 7.6-10.8h-4.6z' },
+    { v: 300, ar: 'زلزال', en: 'QUAKE', c: '#F7E3AE', glyph: 'M2.8 12H6l2-6.4 3 12.8 2.6-8 1.8 4h5.8' },
+    { v: 500, ar: 'تاج', en: 'CROWN', c: '#FFF3D6', glyph: 'M4 17.6h16M4.4 7.6l3.9 3.6L12 5.4l3.7 5.8 3.9-3.6-1.5 7.4H5.9z' },
+    { v: 1000, ar: 'أسطورة', en: 'LEGEND', c: '#E4506A', glyph: 'M12 3.4l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8z' },
 ];
 
-const AlertTiers: React.FC<{ title: string; note: string }> = ({ title, note }) => (
-    <div className="card-sheen mt-6 rounded-[26px] border border-gold/15 bg-wine-950/70 p-5 md:p-6 overflow-hidden">
-        <p className="text-center text-[10px] md:text-[11px] font-black text-gold/50 tracking-[0.3em] uppercase mb-5">{title}</p>
-        <div className="flex items-end justify-center gap-2 sm:gap-4 h-44 sm:h-52" dir="ltr">
-            {TIERS.map((tr, i) => (
-                <div key={tr.amount} className="flex flex-col items-center justify-end h-full w-[17%] max-w-[110px] min-w-0">
-                    <p className="text-sm sm:text-lg font-black tracking-wider mb-1.5" style={{ color: tr.c, textShadow: '0 2px 0 #000' }} dir="ltr">{tr.amount}</p>
-                    <div className="tier-bar relative w-full rounded-t-xl border-x border-t overflow-hidden"
-                        style={{ height: tr.h, background: `linear-gradient(to bottom, ${tr.c}, ${tr.c}66 55%, rgba(0,0,0,0.55))`, borderColor: `${tr.c}77`, boxShadow: `inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -8px 16px rgba(0,0,0,0.5), 0 0 24px -6px ${tr.c}88`, animationDelay: `${i * 110}ms` }}>
-                        <div className="absolute top-0 inset-x-2 h-1.5 rounded-full bg-white/50 blur-[1px]" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.12] to-transparent" />
-                    </div>
-                    <div className="w-full h-2 rounded-b-md bg-black/70 border-x border-b border-gold/15" />
-                    <p className="text-[8px] sm:text-[9px] font-black tracking-[0.22em] text-white/40 mt-1.5">{tr.name}</p>
-                </div>
-            ))}
+const AlertTiers: React.FC<{ title: string; note: string; lang: Language }> = ({ title, note, lang }) => {
+    const ar = lang === 'ar';
+    return (
+        <div className="mt-6 rounded-[26px] border border-gold/15 bg-wine-950/70 p-5 md:p-7 overflow-hidden">
+            <div className="flex items-center justify-center gap-3 mb-1.5">
+                <span className="tier-head-line" aria-hidden="true" />
+                <p className="text-center text-[10px] md:text-[11px] font-black text-gold/60 tracking-[0.3em] uppercase">{title}</p>
+                <span className="tier-head-line" aria-hidden="true" />
+            </div>
+            <p className="text-center text-[11px] md:text-xs text-white/35 font-bold mb-6">
+                {ar ? 'كل ختمٍ أعلى من الذي قبله — اختر ما يليق بلحظتك' : 'Every seal outranks the one before it — pick the one the moment deserves'}
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3.5">
+                {TIERS.map((tr, i) => {
+                    const top = i === TIERS.length - 1;
+                    return (
+                        <div key={tr.v} className="tier-cell" style={{ animationDelay: `${i * 90}ms` }}>
+                            <a href="https://tip.dokan.sa/xlxwi" target="_blank" rel="noopener noreferrer"
+                                className={`tier-plate${top ? ' tier-plate-top' : ''}`}
+                                style={{ '--tc': tr.c } as React.CSSProperties}
+                                title={ar ? `تنبيه ${tr.ar} — ${tr.v} ريال` : `${tr.en} alert — ${tr.v} SAR`}
+                                aria-label={ar ? `مستوى التنبيه ${tr.ar} بقيمة ${tr.v} ريال` : `${tr.en} alert tier at ${tr.v} SAR`}>
+                                <span className="tier-plate-glow" aria-hidden="true" />
+                                <span className="tier-plate-sheen" aria-hidden="true" />
+                                {top && <span className="tier-ribbon">{ar ? 'الأعلى' : 'PEAK'}</span>}
+                                <span className="tier-emblem" aria-hidden="true">
+                                    <span className="tier-ring" />
+                                    <span className="tier-ring-inner" />
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
+                                        <path d={tr.glyph} />
+                                    </svg>
+                                </span>
+                                <span className="tier-amount">
+                                    <b className="font-gaming" dir="ltr">{tr.v.toLocaleString('en-US')}</b>
+                                    <i>{ar ? 'ر.س' : 'SAR'}</i>
+                                </span>
+                                <span className="tier-name">
+                                    <span className="tier-name-ar">{tr.ar}</span>
+                                    <span className="tier-name-en" dir="ltr">{tr.en}</span>
+                                </span>
+                                <span className="tier-meter" aria-hidden="true">
+                                    {[0, 1, 2, 3, 4, 5].map((s) => (
+                                        <span key={s} className={`tier-seg${s <= i ? ' on' : ''}`} style={{ animationDelay: `${s * 140}ms` }} />
+                                    ))}
+                                </span>
+                            </a>
+                        </div>
+                    );
+                })}
+            </div>
+            <p className="text-center text-[10px] text-white/30 mt-5 font-medium">{note}</p>
         </div>
-        <p className="text-center text-[10px] text-white/30 mt-4 font-medium">{note}</p>
-    </div>
-);
+    );
+};
 
 // Static-3D donate gate with true brand identities + ambient effects (3D stays fixed)
 const DonateGate: React.FC<{
@@ -1114,7 +1150,7 @@ const SupportArena: React.FC<{ lang: Language; supporters: Supporter[] }> = ({ l
                 </div>
             </div>
 
-            <AlertTiers title={t.tiersTitle} note={lang === 'en' ? 'Donations are non-refundable' : 'التبرعات غير قابلة للاسترداد'} />
+            <AlertTiers lang={lang} title={t.tiersTitle} note={lang === 'en' ? 'Donations are non-refundable' : 'التبرعات غير قابلة للاسترداد'} />
         </div>
     );
 };
