@@ -104,7 +104,7 @@ const TRANSLATIONS = {
         hallTitle: 'HALL OF LEGENDS', hallSub: 'Live top supporters',
         sourceStreamlabs: 'STREAMLABS', sourceDokan: 'DOKAN',
         modsTitle: 'Moderators',
-        tiersTitle: 'Special alert tiers', pollLive: 'LIVE POLL',
+        tiersTitle: 'Special alert tiers', tiersClasico: 'El Clásico alerts', pollLive: 'LIVE POLL',
         theaterTitle: 'Live Theater', viewers: 'watching',
         theater: {
             live: 'LIVE', uptime: 'UPTIME', viewersNow: 'VIEWERS', catViewers: 'IN CATEGORY',
@@ -140,7 +140,7 @@ const TRANSLATIONS = {
         hallTitle: 'قاعة الأساطير', hallSub: 'أعلى الداعمين المباشرين',
         sourceStreamlabs: 'ستريم لابس', sourceDokan: 'دكان',
         modsTitle: 'المشرفون',
-        tiersTitle: 'مستويات التنبيه الخاصة', pollLive: 'تصويت مباشر',
+        tiersTitle: 'مستويات التنبيه الخاصة', tiersClasico: 'تنبيهات الكلاسيكو', pollLive: 'تصويت مباشر',
         theaterTitle: 'مسرح البث المباشر', viewers: 'مشاهد',
         theater: {
             live: 'مباشر', uptime: 'مدة البث', viewersNow: 'المشاهدون', catViewers: 'في الفئة',
@@ -872,14 +872,23 @@ const RankBadge: React.FC<{ rank: number; big?: boolean }> = ({ rank, big = fals
 // Special alert tiers — سلّم أعمدة معدنية: ارتفاع العمود هو قوّة التنبيه، والمبلغ فوقه
 type Tier = { v: number; c: string; h: number };
 const TIERS: Tier[] = [
-    { v: 25, c: '#A9663C', h: 26 },
-    { v: 99, c: '#A2AAB6', h: 40 },
-    { v: 300, c: '#E3B341', h: 54 },
-    { v: 505, c: '#DCEFF3', h: 69 },
-    { v: 999, c: '#C9304C', h: 84 },
+    { v: 50, c: '#A9663C', h: 30 },
+    { v: 100, c: '#8E97A3', h: 40 },
+    { v: 200, c: '#CDD4DA', h: 50 },
+    { v: 300, c: '#E3B341', h: 62 },
+    { v: 500, c: '#DCEFF3', h: 75 },
+    { v: 1000, c: '#C9304C', h: 88 },
 ];
 
-const AlertTiers: React.FC<{ title: string; note: string; lang: Language }> = ({ title, note, lang }) => {
+// Clásico editions — شعارات مخصّصة. w/h مضبوطة على نسبة كل SVG: ملف مدريد فيه
+// هوامش شفافة فوق وتحت (viewBox أصغر من width/height)، فلولاه يظهر أصغر من الباركا.
+type Special = { v: number; c: string; img: string; ar: string; en: string; w: number; h: number };
+const SPECIALS: Special[] = [
+    { v: 88, c: '#D6E2EA', img: 'real-madrid-2.svg', ar: 'مدريد', en: 'MADRID', w: 54, h: 106 },
+    { v: 94, c: '#B4264A', img: 'fc-barcelona.svg', ar: 'برشلونة', en: 'BARCELONA', w: 70, h: 70 },
+];
+
+const AlertTiers: React.FC<{ title: string; note: string; clasico: string; lang: Language }> = ({ title, note, clasico, lang }) => {
     const ar = lang === 'ar';
     return (
         <div className="mt-6 rounded-[26px] border border-gold/15 bg-wine-950/70 px-4 py-6 sm:px-6 md:px-7 md:py-7 overflow-hidden">
@@ -899,7 +908,7 @@ const AlertTiers: React.FC<{ title: string; note: string; lang: Language }> = ({
                     return (
                         <a key={tr.v} href="https://streamlabs.com/xlxwi/tip" target="_blank" rel="noopener noreferrer"
                             className="tier-col"
-                            style={{ '--tc': tr.c, '--h': `${tr.h}%`, animationDelay: `${i * 95}ms` } as React.CSSProperties}
+                            style={{ '--tc': tr.c, '--h': `${tr.h}%`, animationDelay: `${i * 85}ms` } as React.CSSProperties}
                             title={ar ? `تنبيه ${usd} دولار` : `${usd} dollar alert`}
                             aria-label={ar ? `مستوى تنبيه ${usd} دولار` : `${usd} dollar alert tier`}>
                             <span className="tier-amount font-heading"><i>$</i>{usd}</span>
@@ -910,6 +919,35 @@ const AlertTiers: React.FC<{ title: string; note: string; lang: Language }> = ({
                             </span>
                             <span className="tier-plinth" aria-hidden="true" />
                         </a>
+                    );
+                })}
+            </div>
+            <div className="tier-duel-head">
+                <span className="tier-head-line" aria-hidden="true" />
+                <p className="text-center text-[10px] md:text-[11px] font-black text-gold/55 tracking-[0.3em] uppercase">{clasico}</p>
+                <span className="tier-head-line" aria-hidden="true" />
+            </div>
+            <div className="tier-duel">
+                {SPECIALS.map((sp, i) => {
+                    const usd = sp.v.toLocaleString('en-US');
+                    const name = ar ? sp.ar : sp.en;
+                    return (
+                        <React.Fragment key={sp.img}>
+                            {i > 0 && <span className="tier-clash" aria-hidden="true"><b>×</b></span>}
+                            <a href="https://streamlabs.com/xlxwi/tip" target="_blank" rel="noopener noreferrer"
+                                className="tier-crest" style={{ '--tc': sp.c } as React.CSSProperties}
+                                title={ar ? `تنبيه ${name} ${usd} دولار` : `${name} ${usd} dollar alert`}
+                                aria-label={ar ? `تنبيه ${name} الخاص ${usd} دولار` : `${name} special alert ${usd} dollars`}>
+                                <span className="tier-crest-mark" aria-hidden="true">
+                                    <img src={sp.img} alt="" width={sp.w} height={sp.h} loading="lazy" decoding="async"
+                                        style={{ width: sp.w, height: sp.h }} />
+                                </span>
+                                <span className="tier-crest-text">
+                                    <span className="tier-crest-amount font-heading" dir="ltr"><i>$</i>{usd}</span>
+                                    <span className="tier-crest-name">{name}</span>
+                                </span>
+                            </a>
+                        </React.Fragment>
                     );
                 })}
             </div>
@@ -1133,7 +1171,7 @@ const SupportArena: React.FC<{ lang: Language; supporters: Supporter[] }> = ({ l
                 </div>
             </div>
 
-            <AlertTiers lang={lang} title={t.tiersTitle} note={lang === 'en' ? 'Donations are non-refundable' : 'التبرعات غير قابلة للاسترداد'} />
+            <AlertTiers lang={lang} title={t.tiersTitle} clasico={t.tiersClasico} note={lang === 'en' ? 'Donations are non-refundable' : 'التبرعات غير قابلة للاسترداد'} />
         </div>
     );
 };

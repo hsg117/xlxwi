@@ -465,17 +465,17 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
 .tier-ladder {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 6px;
-  height: 200px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 5px;
+  height: 214px;
   padding-block: 6px 0;
 }
 @media (min-width: 640px) {
-  .tier-ladder { gap: 14px; height: 232px; }
+  .tier-ladder { gap: 12px; height: 224px; }
 }
 /* على الشاشات العريضة السلّم يظلّ متماسكًا بدل ما تتباعد أعمدته */
 @media (min-width: 1024px) {
-  .tier-ladder { gap: 26px; height: 258px; max-width: 900px; margin-inline: auto; }
+  .tier-ladder { gap: 20px; height: 252px; max-width: 880px; margin-inline: auto; }
 }
 
 /* هالة ذهبية خلف السلّم: تملأ فراغ الجانبين وتثبّت Composition */
@@ -519,7 +519,7 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
   align-items: baseline;
   justify-content: center;
   gap: 1px;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 900;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -541,7 +541,7 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
 /* العمود: وجه علوي فاتح + جسم معدني + حافتان مظلمتان تعطيانه سماكة أسطوانية */
 .tier-pillar {
   position: absolute;
-  left: 13%; right: 13%; bottom: 9px;
+  left: 18%; right: 18%; bottom: 9px;
   /* ناقص 16px: بدونها ياكل أعلى عمود هامش المبلغ ويلصق فيه */
   height: calc(var(--h, 60%) - 16px);
   overflow: hidden;
@@ -601,7 +601,7 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
 /* القاعدة: عتبة داكنة بحدٍّ ذهبي، تعلوها هالة لون المستوى */
 .tier-plinth {
   position: absolute;
-  left: 7%; right: 7%; bottom: 0;
+  left: 12%; right: 12%; bottom: 0;
   height: 7px;
   border-radius: 4px;
   border: 1px solid rgba(227, 179, 65, 0.14);
@@ -611,7 +611,7 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
 }
 .tier-floor {
   position: absolute;
-  left: 12%; right: 12%; bottom: 0;
+  left: 18%; right: 18%; bottom: 0;
   height: 10px;
   border-radius: 50%;
   background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--tc, #E3B341) 72%, transparent), transparent 74%);
@@ -641,16 +641,177 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; bord
   55% { transform: translateY(-46%); opacity: 0; }
 }
 
+/* تنبيهات الكلاسيكو — بطاقتان متقابلتان بالشعار، يفصلهما معيّن ذهبي */
+.tier-duel-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 28px 0 14px;
+}
+.tier-duel {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 8px;
+}
 @media (min-width: 640px) {
-  .tier-amount { font-size: 21px; }
+  .tier-duel { gap: 14px; }
+}
+
+.tier-crest {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 288px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 158px;
+  padding: 18px 10px 16px;
+  border-radius: 18px;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--tc, #E3B341) 20%, transparent);
+  background:
+    radial-gradient(112% 66% at 50% 0%, color-mix(in srgb, var(--tc, #E3B341) 13%, transparent), transparent 68%),
+    linear-gradient(180deg, rgba(52, 12, 22, 0.55) 0%, rgba(12, 3, 7, 0.9) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 243, 214, 0.06), 0 16px 30px -24px rgba(0, 0, 0, 0.95);
+  animation: tier-rise 0.5s var(--ease) both;
+  animation-delay: 0.5s;
+  transition: translate 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.tier-crest:hover {
+  translate: 0 -5px;
+  border-color: color-mix(in srgb, var(--tc, #E3B341) 44%, transparent);
+  box-shadow: 0 26px 40px -26px rgba(0, 0, 0, 1), 0 0 42px -20px var(--tc, #E3B341);
+}
+.tier-crest:focus-visible { outline: 2px solid var(--tc, #E3B341); outline-offset: 3px; }
+
+/* حافة علوية بلون النادي تربط البطاقة بلغة الأعمدة */
+.tier-crest::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 13%; right: 13%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--tc, #E3B341), transparent);
+  opacity: 0.55;
+  transition: opacity 0.4s var(--ease);
+}
+.tier-crest:hover::before { opacity: 1; }
+
+/* لمعة تنزلق على البطاقة عند المرور */
+.tier-crest::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: -45%; width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  pointer-events: none;
+}
+.tier-crest:hover::after { animation: tier-sweep 0.75s var(--ease); }
+@keyframes tier-sweep {
+  to { transform: translateX(320%); }
+}
+
+/* الشعار على قرص ضوء من لون النادي — الحلقة تتبع الشعار أينما ارتفع أو افترش */
+.tier-crest-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100px; height: 106px;
+  flex: none;
+}
+.tier-crest-mark::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--tc, #E3B341) 32%, transparent), transparent 68%);
+  filter: blur(7px);
+  opacity: 0.8;
+  transition: opacity 0.4s var(--ease);
+}
+.tier-crest:hover .tier-crest-mark::before { opacity: 1; }
+.tier-crest-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.tier-crest-mark img {
+  display: block;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.8));
+  transition: transform 0.4s var(--ease);
+}
+.tier-crest:hover .tier-crest-mark img { transform: scale(1.07); }
+
+.tier-crest-amount {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #FFF3D6 8%, #E3B341 62%, #A9761A 98%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.7));
+}
+.tier-crest-amount i {
+  font-style: normal;
+  font-size: 0.72em;
+  opacity: 0.85;
+}
+.tier-crest-name {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  padding-inline-start: 0.22em;
+  color: color-mix(in srgb, var(--tc, #E3B341) 60%, #FFF3D6);
+}
+
+/* المعيّن الفاصل: لا نص، لا لغة — رمز واحد يكفي */
+.tier-clash {
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  rotate: 45deg;
+  border-radius: 8px;
+  border: 1px solid rgba(227, 179, 65, 0.4);
+  background: linear-gradient(180deg, #33101A, #0C0206);
+  box-shadow: 0 0 24px -8px rgba(227, 179, 65, 0.75), inset 0 1px 0 rgba(255, 243, 214, 0.12);
+}
+.tier-clash b {
+  rotate: -45deg;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+  color: #E3B341;
+}
+
+@media (min-width: 640px) {
+  .tier-amount { font-size: 18px; }
+  /* النص يرتفع جنب الشعار بدل ما يُرصّ تحته — يملأ العرض بلا فراغ */
+  .tier-crest { flex-direction: row; gap: 18px; min-height: 136px; padding: 18px 20px; }
+  .tier-crest-amount { font-size: 26px; }
+  .tier-crest-name { font-size: 12px; }
 }
 @media (min-width: 1024px) {
-  .tier-amount { font-size: 24px; }
+  .tier-amount { font-size: 21px; }
   .tier-pillar { border-radius: 12px 12px 6px 6px; }
+  .tier-crest { min-height: 152px; padding: 22px 24px; max-width: 320px; }
+  .tier-crest-amount { font-size: 30px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tier-col, .tier-pillar { animation: none; }
+  .tier-col, .tier-pillar, .tier-crest { animation: none; }
   .tier-pillar-top::after { animation: none; opacity: 0; }
+  .tier-crest:hover::after { animation: none; }
 }
 .bar-grow {
   transform: scaleX(0);
