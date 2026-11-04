@@ -104,7 +104,7 @@ const TRANSLATIONS = {
         hallTitle: 'HALL OF LEGENDS', hallSub: 'Live top supporters',
         sourceStreamlabs: 'STREAMLABS', sourceDokan: 'DOKAN',
         modsTitle: 'Moderators',
-        tiersTitle: 'Special alert tiers', tiersClasico: 'El Clásico alerts', pollLive: 'LIVE POLL',
+        tiersTitle: 'Special alert tiers', tiersClasico: 'Other alerts', pollLive: 'LIVE POLL',
         theaterTitle: 'Live Theater', viewers: 'watching',
         theater: {
             live: 'LIVE', uptime: 'UPTIME', viewersNow: 'VIEWERS', catViewers: 'IN CATEGORY',
@@ -140,7 +140,7 @@ const TRANSLATIONS = {
         hallTitle: 'قاعة الأساطير', hallSub: 'أعلى الداعمين المباشرين',
         sourceStreamlabs: 'ستريم لابس', sourceDokan: 'دكان',
         modsTitle: 'المشرفون',
-        tiersTitle: 'مستويات التنبيه الخاصة', tiersClasico: 'تنبيهات الكلاسيكو', pollLive: 'تصويت مباشر',
+        tiersTitle: 'مستويات الأليرتات الخاصة', tiersClasico: 'الأليرتات الأخرى', pollLive: 'تصويت مباشر',
         theaterTitle: 'مسرح البث المباشر', viewers: 'مشاهد',
         theater: {
             live: 'مباشر', uptime: 'مدة البث', viewersNow: 'المشاهدون', catViewers: 'في الفئة',
@@ -869,13 +869,13 @@ const RankBadge: React.FC<{ rank: number; big?: boolean }> = ({ rank, big = fals
     </span>
 );
 
-// Special alert tiers — سلّم أعمدة معدنية: ارتفاع العمود هو قوّة التنبيه، والمبلغ فوقه
+// Special alert tiers — سلّم أعمدة معدنية: ارتفاع العمود هو قوّة الأليرت، والمبلغ فوقه
 type Tier = { v: number; c: string; h: number };
 const TIERS: Tier[] = [
     { v: 50, c: '#BE7B3E', h: 30 },
     { v: 100, c: '#C8CED6', h: 40 },
     { v: 200, c: '#E3B341', h: 50 },
-    { v: 300, c: '#E6EEF6', h: 62 },
+    { v: 300, c: '#57B6D9', h: 62 },
     { v: 500, c: '#A25AD6', h: 75 },
     { v: 1000, c: '#C9304C', h: 88 },
 ];
@@ -909,8 +909,8 @@ const AlertTiers: React.FC<{ title: string; note: string; clasico: string; lang:
                         <a key={tr.v} href="https://streamlabs.com/xlxwi/tip" target="_blank" rel="noopener noreferrer"
                             className="tier-col"
                             style={{ '--tc': tr.c, '--h': `${tr.h}%`, animationDelay: `${i * 85}ms` } as React.CSSProperties}
-                            title={ar ? `تنبيه ${usd} دولار` : `${usd} dollar alert`}
-                            aria-label={ar ? `مستوى تنبيه ${usd} دولار` : `${usd} dollar alert tier`}>
+                            title={ar ? `أليرت ${usd} دولار` : `${usd} dollar alert`}
+                            aria-label={ar ? `مستوى أليرت ${usd} دولار` : `${usd} dollar alert tier`}>
                             <span className="tier-amount font-heading"><i>$</i>{usd}</span>
                             <span className="tier-floor" aria-hidden="true" />
                             <span className={`tier-pillar${top ? ' tier-pillar-top' : ''}`} aria-hidden="true">
@@ -936,8 +936,8 @@ const AlertTiers: React.FC<{ title: string; note: string; clasico: string; lang:
                             {i > 0 && <span className="tier-clash" aria-hidden="true"><b>×</b></span>}
                             <a href="https://streamlabs.com/xlxwi/tip" target="_blank" rel="noopener noreferrer"
                                 className="tier-crest" style={{ '--tc': sp.c } as React.CSSProperties}
-                                title={ar ? `تنبيه ${name} ${usd} دولار` : `${name} ${usd} dollar alert`}
-                                aria-label={ar ? `تنبيه ${name} الخاص ${usd} دولار` : `${name} special alert ${usd} dollars`}>
+                                title={ar ? `أليرت ${name} ${usd} دولار` : `${name} ${usd} dollar alert`}
+                                aria-label={ar ? `أليرت ${name} ${usd} دولار` : `${name} alert ${usd} dollars`}>
                                 <span className="tier-crest-mark" aria-hidden="true">
                                     <img src={sp.img} alt="" width={sp.w} height={sp.h} loading="lazy" decoding="async"
                                         style={{ width: sp.w, height: sp.h }} />
