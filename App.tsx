@@ -869,15 +869,14 @@ const RankBadge: React.FC<{ rank: number; big?: boolean }> = ({ rank, big = fals
     </span>
 );
 
-// Special alert tiers — لوحات ذهبية: المبلغ هو البطل، وخيط القوّة يدرّج المستويات
-type Tier = { v: number; c: string };
+// Special alert tiers — سلّم أعمدة معدنية: ارتفاع العمود هو قوّة التنبيه، والمبلغ فوقه
+type Tier = { v: number; c: string; h: number };
 const TIERS: Tier[] = [
-    { v: 50, c: '#A98B5F' },
-    { v: 100, c: '#C49A55' },
-    { v: 200, c: '#E3B341' },
-    { v: 300, c: '#EDC46A' },
-    { v: 500, c: '#F5DFA0' },
-    { v: 1000, c: '#FFF0C9' },
+    { v: 25, c: '#A9663C', h: 26 },
+    { v: 99, c: '#A2AAB6', h: 40 },
+    { v: 300, c: '#E3B341', h: 54 },
+    { v: 505, c: '#DCEFF3', h: 69 },
+    { v: 999, c: '#C9304C', h: 84 },
 ];
 
 const AlertTiers: React.FC<{ title: string; note: string; lang: Language }> = ({ title, note, lang }) => {
@@ -889,27 +888,28 @@ const AlertTiers: React.FC<{ title: string; note: string; lang: Language }> = ({
                 <p className="text-center text-[10px] md:text-[11px] font-black text-gold/60 tracking-[0.3em] uppercase">{title}</p>
                 <span className="tier-head-line" aria-hidden="true" />
             </div>
-            <p className="text-center text-[11px] md:text-xs text-white/40 font-bold mt-2.5 mb-7">
+            <p className="text-center text-[11px] md:text-xs text-white/40 font-bold mt-2.5 mb-6">
                 {ar ? 'المبالغ بالدولار الأمريكي' : 'Amounts in US dollars'}
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3">
+            <div className="tier-ladder" dir="ltr">
+                <span className="tier-ground" aria-hidden="true" />
                 {TIERS.map((tr, i) => {
                     const top = i === TIERS.length - 1;
-                    const rank = (i + 1) / TIERS.length;
+                    const usd = tr.v.toLocaleString('en-US');
                     return (
-                        <div key={tr.v} className="tier-cell"
-                            style={{ animationDelay: `${i * 80}ms`, '--tc': tr.c, '--lvl': rank, '--p': `${rank * 100}%` } as React.CSSProperties}>
-                            <a href="https://streamlabs.com/xlxwi/tip" target="_blank" rel="noopener noreferrer"
-                                className={`tier-plate${top ? ' tier-plate-top' : ''}`}
-                                title={ar ? `تنبيه ${tr.v.toLocaleString('en-US')} دولار` : `${tr.v.toLocaleString('en-US')} dollar alert`}
-                                aria-label={ar ? `مستوى التنبيه ${tr.v.toLocaleString('en-US')} دولار` : `${tr.v.toLocaleString('en-US')} dollar alert tier`}>
-                                <span className="tier-plate-glow" aria-hidden="true" />
-                                <span className="tier-plate-sheen" aria-hidden="true" />
-                                {top && <span className="tier-flag">{ar ? 'الأعلى' : 'PEAK'}</span>}
-                                <span className="tier-amount font-gaming" dir="ltr">{tr.v.toLocaleString('en-US')}</span>
-                                <span className="tier-meter" aria-hidden="true"><i /></span>
-                            </a>
-                        </div>
+                        <a key={tr.v} href="https://streamlabs.com/xlxwi/tip" target="_blank" rel="noopener noreferrer"
+                            className="tier-col"
+                            style={{ '--tc': tr.c, '--h': `${tr.h}%`, animationDelay: `${i * 95}ms` } as React.CSSProperties}
+                            title={ar ? `تنبيه ${usd} دولار` : `${usd} dollar alert`}
+                            aria-label={ar ? `مستوى تنبيه ${usd} دولار` : `${usd} dollar alert tier`}>
+                            <span className="tier-amount font-heading"><i>$</i>{usd}</span>
+                            <span className="tier-floor" aria-hidden="true" />
+                            <span className={`tier-pillar${top ? ' tier-pillar-top' : ''}`} aria-hidden="true">
+                                <span className="tier-cap" />
+                                <span className="tier-gloss" />
+                            </span>
+                            <span className="tier-plinth" aria-hidden="true" />
+                        </a>
                     );
                 })}
             </div>
