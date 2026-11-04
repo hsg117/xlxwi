@@ -872,11 +872,11 @@ const RankBadge: React.FC<{ rank: number; big?: boolean }> = ({ rank, big = fals
 // Special alert tiers — سلّم أعمدة معدنية: ارتفاع العمود هو قوّة التنبيه، والمبلغ فوقه
 type Tier = { v: number; c: string; h: number };
 const TIERS: Tier[] = [
-    { v: 50, c: '#A9663C', h: 30 },
-    { v: 100, c: '#8E97A3', h: 40 },
-    { v: 200, c: '#CDD4DA', h: 50 },
-    { v: 300, c: '#E3B341', h: 62 },
-    { v: 500, c: '#DCEFF3', h: 75 },
+    { v: 50, c: '#BE7B3E', h: 30 },
+    { v: 100, c: '#C8CED6', h: 40 },
+    { v: 200, c: '#E3B341', h: 50 },
+    { v: 300, c: '#E6EEF6', h: 62 },
+    { v: 500, c: '#A25AD6', h: 75 },
     { v: 1000, c: '#C9304C', h: 88 },
 ];
 
